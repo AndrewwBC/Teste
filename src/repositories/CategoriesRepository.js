@@ -1,0 +1,21 @@
+const db = require('../database/index');
+
+class CategoriesRepository {
+  async findAll() {
+    const rows = await db.query(`SELECT * FROM categories`);
+    return rows;
+  }
+
+  async create({ name }) {
+    const [row] = await db.query(
+      `
+    INSERT INTO categories(name) values($1)
+    RETURNING *
+    `,
+      [name],
+    );
+    return row;
+  }
+}
+
+module.exports = new CategoriesRepository();
